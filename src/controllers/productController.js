@@ -1,4 +1,5 @@
 const Product = require("../models/Product")
+const Categorias = require("../models/Categorias")
 
 const crearProducto =async  (req,res) =>{
   const productData = {
@@ -7,13 +8,26 @@ const crearProducto =async  (req,res) =>{
   }
   const createProduct = await Product.create(productData)
   res.status(201).send(createProduct)
-  console.log(createProduct)
 }
+const crearCategoria =async  (req,res) =>{
+    const categoriasData = {
+      ...req.body,
+  
+    }
+    const createCategoria = await Categorias.create(categoriasData)
+    res.status(201).send(createCategoria)
+  }
 
 const mostrarProducto = async (req,res)=>{
 const product = await Product.find()
 res.status(201).send(product)
 }
+const mostrarCategoria = async (req,res)=>{
+    const categoria = await Categorias.find()
+    res.status(201).send(categoria)
+    }
+    
+
 
 const mostrarProductoId = async (req,res) =>{
     try{
@@ -74,4 +88,4 @@ const categorias = async (req, res) => {
 
 
     }
-module.exports = {crearProducto,mostrarProducto,mostrarProductoId,actualizarProducto,borrarProducto,categorias,pujaExitosa,pujas}
+module.exports = {crearProducto,mostrarProducto,mostrarProductoId,actualizarProducto,borrarProducto,categorias,pujaExitosa,pujas,mostrarCategoria,crearCategoria}
