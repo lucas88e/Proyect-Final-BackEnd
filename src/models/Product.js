@@ -5,7 +5,7 @@ const ProductSchema = new mongoose.Schema({
    imagen: {type:String},
    categoria: {type: String, enum: ["Hogar","Ropa","Electrónica","Mascotas"]},
    talla:{type:String,enum:["XS","S","M","L","XL"]},
-   precio: {type:String,required:true} 
+   precio: {type:Number,required:true} 
 })
 const Product = mongoose.model("Product",ProductSchema)
 
