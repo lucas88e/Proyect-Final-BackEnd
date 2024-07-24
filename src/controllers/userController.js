@@ -22,11 +22,22 @@ exports.getUsers = async (req, res) => {
       const token = jwt.sign({ _id: user._id }, process.env.jwtPrivateKey);
       res.setHeader('Access-Control-Expose-Headers', 'x-auth-token');
       res.setHeader('x-auth-token', token);
-      res.status(200).json({ message: 'Login exitoso', token });
+      res.status(200).json({ message: 'Login exitoso', token , _id: user._id});
   } catch (error) {
       console.error('Error en el login:', error);
       res.status(500).send('Error interno en el servidor.');
   }
+}
+exports.getUser = async (req, res) => {
+  try{
+     const id= req.params.id
+  const users =await User.findById(id)
+res.send(users)
+  }
+  catch(error){
+    console.log(error)
+  }
+ 
 }
 
 exports.createUser = async (req, res) =>{

@@ -26,6 +26,19 @@ const mostrarCategoria = async (req,res)=>{
     const categoria = await Categorias.find()
     res.status(201).send(categoria)
     }
+
+const actualizarCategoria = async (req,res)=>{
+        const id = req.params.id;
+    
+        const categoriaActualizada = await Categorias.findByIdAndUpdate(
+            id,
+            req.body,
+            {new:true})
+        if(!categoriaActualizada){
+            return res.json({error: "Error producto no encontrado"})
+        }
+        res.status(201).send(`${categoriaActualizada} actualizado exitosamente`)
+        }
     
 
 
@@ -69,7 +82,7 @@ const categorias = async (req, res) => {
         const categoriasArray = categorias.split(',');
     
         // Buscar productos que coincidan con las categorías
-        const todasCategorias = await Product.find({ Categoria: { $in: categoriasArray } });
+        const todasCategorias = await Product.find({ categoria: { $in: categoriasArray } });
         
         res.status(200).send(todasCategorias);
     } catch (error) {
@@ -88,4 +101,4 @@ const categorias = async (req, res) => {
 
 
     }
-module.exports = {crearProducto,mostrarProducto,mostrarProductoId,actualizarProducto,borrarProducto,categorias,pujaExitosa,pujas,mostrarCategoria,crearCategoria}
+module.exports = {crearProducto,actualizarCategoria,mostrarProducto,mostrarProductoId,actualizarProducto,borrarProducto,categorias,pujaExitosa,pujas,mostrarCategoria,crearCategoria}
