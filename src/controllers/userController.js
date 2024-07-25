@@ -65,3 +65,9 @@ exports.createUser = async (req, res) =>{
 
   res.send("Registrado")
 }
+
+exports.logoutUser =  (req,res)=>{
+	 req.session.destroy();
+	res.send("Sesion destruida")
+	
+	}

@@ -2,6 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
+const auth = require("../middlewares/auth.js")
 const {crearProducto,mostrarProducto,crearCategoria,actualizarCategoria,categorias,pujas,pujaExitosa,mostrarProductoId,actualizarProducto, borrarProducto,mostrarCategoria} = require('../controllers/productController');
 router.post("/crear",crearProducto)
 router.get("/productos",mostrarProducto)
