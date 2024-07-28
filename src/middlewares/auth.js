@@ -5,7 +5,7 @@ module.exports = function (req, res, next) {
     console.log(token)
 
     if (!token) {
-        return res.status(401).send("Mira a ver si se te ha olvidado iniciar sesion (login)")
+        return res.redirect("/").status(401).send("Mira a ver si se te ha olvidado iniciar sesion (login)")
     }
 
     try {

@@ -11,11 +11,11 @@ const ProductSchema = new mongoose.Schema({
       default: function() {
          let fechaActual = new Date();
          let fechaFinal = new Date (fechaActual)
-         fechaFinal.setDate(fechaFinal.getDate()+7)
+         fechaFinal.setDate(fechaFinal.getDate()+7)  // Sumarle una semana en dias
          return fechaFinal
       
   } 
- } // Sumarle una semana en milisegundos
+ }
 })
 const Product = mongoose.model("Product",ProductSchema)
 

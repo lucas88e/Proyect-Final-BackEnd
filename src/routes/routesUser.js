@@ -8,7 +8,8 @@ router.post('/login', userController.getUsers);
 router.post('/register', userController.createUser);
 router.post("/logout",(req,res)=>{
 	req.session.destroy();
-	res.send("Sesion destruida")
+	res.send("Sesion destruida").redirect("/")
+	
 	
 	})
 
