@@ -40,34 +40,66 @@ res.send(users)
  
 }
 
-exports.createUser = async (req, res) =>{
-  const {
-    username,
-    password: passwordPlainText,
-    ...rest
-  } = req.body
+exports.createUser =  async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).send("Imagen no proporcionada");
+  }
+    const imagePath = `${req.file.filename}`;
+    const { username, password: passwordPlainText, email, firstName, lastName, mobileNumber, address,avatar, genero, isAdmin } = req.body;
 
-  const user = await User.findOne({ username })
+    if (!username || !passwordPlainText || !email) {
+      return res.status(400).send('Faltan campos requeridos');
+    }
 
-  if (user)
-    return res.status(400).send('Usuario o contraseña invalido')
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).send('Nombre de usuario ya está en uso');
+    }
 
-  const salt = await bcrypt.genSalt(10)
-  const password = await bcrypt.hash(passwordPlainText, salt)
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      return res.status(400).send('Email ya está registrado');
+    }
 
-  const newUser = await User.create({ username, password, ...rest })
+    const salt = await bcrypt.genSalt(10);
+    const password = await bcrypt.hash(passwordPlainText, salt);
 
-  const token = newUser.generateJWT()
-      console.log(token)
+    const newUser = new User({
+      username,
+      password,
+      email,
+      firstName,
+      lastName,
+      mobileNumber,
+      address,
+      avatar:imagePath ,
+      genero,
+      isAdmin
+    });
 
-      res.setHeader('Access-Control-Expose-Headers', 'x-auth-token')
-      res.setHeader('x-auth-token', token)
+    await newUser.save();
 
-  res.send("Registrado")
+    const token = newUser.generateJWT();
+
+    res.setHeader('Access-Control-Expose-Headers', 'x-auth-token');
+    res.setHeader('x-auth-token', token);
+
+    res.status(201).send("Registrado");
+  } catch (error) {
+    console.error('Error en el registro:', error);
+    res.status(500).send('Error en el servidor');
+  }
 }
 
-exports.logoutUser =  (req,res)=>{
-	 req.session.destroy();
+
+exports.logoutUser =async (req,res)=>{
+  try{
+   	await req.session.destroy();
 	res.send("Sesion destruida")
-	
+	 
+  }
+  catch(error){
+    console.log("Error al hacer el logout")
+  }
 	}
