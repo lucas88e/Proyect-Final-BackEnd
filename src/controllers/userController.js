@@ -92,6 +92,17 @@ exports.createUser =  async (req, res) => {
   }
 }
 
+exports.updateUser =async (req,res)=>{
+  const id = req.params.id;
+  const usuarioActualizado = await User.findByIdAndUpdate(
+      id,
+      req.body,
+      {new:true})
+  if(!usuarioActualizado){
+      return res.json({error: "Error usuario no encontrado"})
+  }
+  res.status(201).send(`${usuarioActualizado} actualizado exitosamente`)
+  }
 
 exports.logoutUser =async (req,res)=>{
   try{
@@ -103,3 +114,14 @@ exports.logoutUser =async (req,res)=>{
     console.log("Error al hacer el logout")
   }
 	}
+
+  exports.deleteUser = async (req, res,) => {
+    
+    const id = req.params.id
+    const usuarioBorrado = await User.findByIdAndDelete(id)
+    if (!usuarioBorrado) {
+        return res.json({ error: "Usuario no encontrado" })
+    }
+    res.status(200).send(`${usuarioBorrado} Borrado exitosamente`);
+
+}

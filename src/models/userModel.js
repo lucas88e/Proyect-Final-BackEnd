@@ -18,8 +18,8 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.generateJWT = function () {
 	return jwt.sign(
-		{ username: this.username, isAdmin: this.isAdmin },
-        process.env.jwtPrivateKey	)
+		{ _id: this._id,username: this.username, isAdmin: this.isAdmin },
+        process.env.jwtPrivateKey, { expiresIn: '1h' }	)
 }
 const User = mongoose.model('User', userSchema);
 module.exports = User
