@@ -8,18 +8,20 @@ const session = require("express-session");
 const helmet = require("helmet");
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const compression = require("compression")
+
 
 const app = express();
 dotenv.config();
 
 // Configuración de sesión
 app.use(session({
-  secret: process.env.jwtPrivateKey,
+  secret: process.env.jwtPrivateKey||"secreto",
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false } 
 }));
-
+console.log(process.env.jwtPrivateKey)
 app.use(helmet());
 app.use(cors());
 app.use(bodyParser.json());
@@ -27,6 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Configurar la carpeta public para servir archivos estáticos
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use(compression())
 
 app.use("/", router);
 app.use("/", productRoutes);
