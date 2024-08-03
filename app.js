@@ -23,7 +23,12 @@ app.use(session({
 }));
 console.log(process.env.jwtPrivateKey)
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin:process.env.ORIGIN_CORS,
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
