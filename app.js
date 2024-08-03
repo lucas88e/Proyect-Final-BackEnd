@@ -23,7 +23,11 @@ app.use(session({
 }));
 console.log(process.env.jwtPrivateKey)
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+  origin: 'https://your-frontend-domain.com', // Reemplaza con el dominio de tu frontend en producción
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
