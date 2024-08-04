@@ -5,7 +5,7 @@ const router = express.Router();
 const auth = require("../middlewares/auth.js")
 const { crearProducto, mostrarProducto, crearCategoria, actualizarCategoria, categorias, pujas, pujaExitosa, mostrarProductoId, actualizarProducto, borrarProducto, mostrarCategoria } = require('../controllers/productController');
 const {mostrarPujas,crearPuja} = require("../controllers/PujasController.js")
-
+const isAdmin = require("../middlewares/admin.js")
 router.post("/crear", crearProducto)
 
 router.get("/productos", mostrarProducto)
@@ -19,7 +19,7 @@ router.post("/crearCategoria", crearCategoria)
 router.patch("/categorias/:id", actualizarCategoria)
 
 // Rutas Pujas
-router.post("/crearPuja",auth,crearPuja)
+router.post("/crearPuja",auth,,isAdmin,crearPuja)
 
 router.get("/pujas",auth, mostrarPujas)
 router.get("/pujaExitosa", pujaExitosa)
