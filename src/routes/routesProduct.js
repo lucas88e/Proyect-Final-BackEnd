@@ -19,7 +19,7 @@ router.post("/crearCategoria", crearCategoria)
 router.patch("/categorias/:id", actualizarCategoria)
 
 // Rutas Pujas
-router.post("/crearPuja",auth,,isAdmin,crearPuja)
+router.post("/crearPuja",auth,crearPuja)
 
 router.get("/pujas",auth, mostrarPujas)
 router.get("/pujaExitosa", pujaExitosa)
