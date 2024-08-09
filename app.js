@@ -9,7 +9,7 @@ const helmet = require("helmet");
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const compression = require("compression")
-const allowedOrigins = ['https://proyect-final-front-2.onrender.com', 'http://localhost:5173'];
+const allowedOrigins = ['https://proyect-final-front-2.onrender.com', 'http://localhost:5173','https://proyect-final-front.pages.dev'];
 
 
 const app = express();
