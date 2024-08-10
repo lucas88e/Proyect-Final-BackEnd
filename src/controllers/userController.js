@@ -40,18 +40,28 @@ res.send(users)
  
 }
 
-exports.createUser =  async (req, res) => {
+exports.createUser = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).send("Imagen no proporcionada");
-  }
-    const imagePath = `${req.file.filename}`;
-    const { username, password: passwordPlainText, email, firstName, lastName, mobileNumber, address, genero, isAdmin } = req.body;
+    // Extracción de campos del cuerpo de la solicitud
+    const { 
+      username, 
+      password: passwordPlainText, 
+      email, 
+      firstName, 
+      lastName, 
+      mobileNumber, 
+      address, 
+      avatar, 
+      genero, 
+      isAdmin 
+    } = req.body;
 
+    // Verificación de los campos requeridos
     if (!username || !passwordPlainText || !email) {
       return res.status(400).send('Faltan campos requeridos');
     }
 
+    // Verificación de si el usuario o el email ya existen
     const existingUser = await User.findOne({ username });
     if (existingUser) {
       return res.status(400).send('Nombre de usuario ya está en uso');
@@ -62,9 +72,24 @@ exports.createUser =  async (req, res) => {
       return res.status(400).send('Email ya está registrado');
     }
 
+    // Hash de la contraseña
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(passwordPlainText, salt);
 
+    // Determinar la ruta de la imagen
+    let imagePath;
+    if (req.file) {
+      // Si se subió un archivo, usar su ruta
+      imagePath = req.file.filename;
+    } else if (avatar) {
+      // Si se proporcionó una URL de imagen, usarla
+      imagePath = avatar;
+    } else {
+      // Opcional: asignar una imagen por defecto si no se proporciona ninguna
+      imagePath = 'https://www.cleverfiles.com/howto/wp-content/uploads/2018/03/minion.jpg'; // Reemplaza esto con la ruta real de tu imagen por defecto
+    }
+
+    // Creación del nuevo usuario
     const newUser = new User({
       username,
       password,
@@ -73,15 +98,18 @@ exports.createUser =  async (req, res) => {
       lastName,
       mobileNumber,
       address,
-      avatar:imagePath ,
+      avatar: imagePath,
       genero,
       isAdmin
     });
 
+    // Guardar el usuario en la base de datos
     await newUser.save();
 
+    // Generar el token JWT
     const token = newUser.generateJWT();
 
+    // Enviar el token en el encabezado de la respuesta
     res.setHeader('Access-Control-Expose-Headers', 'x-auth-token');
     res.setHeader('x-auth-token', token);
 
@@ -90,7 +118,9 @@ exports.createUser =  async (req, res) => {
     console.error('Error en el registro:', error);
     res.status(500).send('Error en el servidor');
   }
-}
+};
+
+
 
 exports.updateUser =async (req,res)=>{
   const id = req.params.id;
