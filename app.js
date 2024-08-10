@@ -9,7 +9,11 @@ const helmet = require("helmet");
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const compression = require("compression")
-const allowedOrigins = ['https://proyect-final-front-2.onrender.com', 'http://localhost:5173','https://proyect-final-front.pages.dev'];
+
+const allowedOrigins = [
+  'https://proyect-final-front.pages.dev',
+  'http://localhost:5173', // Agrega localhost como un origen permitido
+];
 
 
 const app = express();
@@ -17,19 +21,28 @@ dotenv.config();
 
 // Configuración de sesión
 app.use(session({
-  secret: process.env.jwtPrivateKey||"secreto",
+  secret: process.env.jwtPrivateKey,
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false } 
 }));
-console.log(process.env.jwtPrivateKey)
-app.use(helmet());
+app.use(helmet())
+
+
 app.use(
   cors({
+    origin: function (origin, callback) {
+      // Permitir solicitudes desde cualquier origen permitido
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
-    origin:"https://proyect-final-front.pages.dev",
   })
 );
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

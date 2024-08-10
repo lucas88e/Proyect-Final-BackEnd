@@ -46,7 +46,7 @@ exports.createUser =  async (req, res) => {
       return res.status(400).send("Imagen no proporcionada");
   }
     const imagePath = `${req.file.filename}`;
-    const { username, password: passwordPlainText, email, firstName, lastName, mobileNumber, address,avatar, genero, isAdmin } = req.body;
+    const { username, password: passwordPlainText, email, firstName, lastName, mobileNumber, address, genero, isAdmin } = req.body;
 
     if (!username || !passwordPlainText || !email) {
       return res.status(400).send('Faltan campos requeridos');
